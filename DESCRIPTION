@@ -1,0 +1,20 @@
+Package: GPIpackage
+Type: Package
+Title: Generalized Probability Inference Package
+Version: 0.1.0
+Author: Your Name
+Maintainer: Your Name <your.email@example.com>
+Description: Package for Generalized Probability Inference (GPI) using Dirichlet-Multinomial models.
+Depends:
+    R (>= 3.5.0)
+Imports:
+    rstan,
+    dplyr,
+    patchwork,
+    ggplot2,
+    bayesplot,
+    loo,
+    viridis
+License: GPL-3
+Encoding: UTF-8
+RoxygenNote: 7.3.2
