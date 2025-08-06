@@ -19,8 +19,7 @@ functions {
 
 data {
   int<lower=0> n;                     // Number of observations (e.g., pools or tumors)
-  int<lower=0> C;                     // Number of cell lines multiplied by replicates per cell line
-  int<lower=0> L;                     // Number of cell lines
+  int<lower=0> C;                     // Number of cell lines 
   int y[n, C];                        // Observed cell counts
   int<lower=1> K;                     // Number of groups (treatments)
   int<lower=1, upper=K> group[n];     // Group assignment for each observation

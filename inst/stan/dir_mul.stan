@@ -19,7 +19,7 @@ functions {
 
 data {
   int<lower=0> n; // Number of observations (pools or tumor)
-  int<lower=0> C; // cell lines * (replicate of each cell line) >> for example 8*3
+  int<lower=0> C; // Number of cell lines 
   int y [n,C]; // observed cell counts
   int<lower=1> K;                   // Number of groups (number of treatments)
   int<lower=1, upper=K> group[n];    // Group assignment for each observation

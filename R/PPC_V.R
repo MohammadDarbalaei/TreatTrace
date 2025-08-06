@@ -16,8 +16,11 @@
 #'         overlaid with observed data, scaled proportionally.
 #'
 #' @examples
-#' # Assuming `model` is a list containing `condition_v`, `fit_V`, `V`, and `n_sam`:
+#' \dontrun{
+#' # Example not run: requires input list with components like 'condition_v', 'fit_V', etc.
+#' model <- list(condition_v = ..., fit_V = ..., V = ..., n_sam = ...)
 #' PPC_V(model)
+#' }
 #'
 #' @import ggplot2
 #' @export

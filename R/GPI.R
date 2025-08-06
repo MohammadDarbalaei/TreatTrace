@@ -2,25 +2,24 @@
 #'
 #' Conducts Bayesian inference on barcoding data and tumor volume (in vivo) or confluency (in vitro) measurements.
 #' Utilizes a Dirichlet-multinomial model for count data, a log-normal likelihood for tumor volume in vivo,
-#' and a beta likelihood for confluency in vitro. Allows model selection based on the `dirr` parameter.
+#' and a beta likelihood for confluency in vitro.
 #'
 #' @param data A list containing the following components:
 #'   \itemize{
-#'     \item \code{data_count}: A matrix or data frame of observed counts. Rows represent treatment groups, and columns represent cell line replicates.
+#'     \item \code{data_count}: A matrix or data frame of barcode read counts. Rows are experimental replicates (e.g., DMSO_1), and columns are genotypes or mutations (e.g., PTEN, TSC2).
 #'     \item \code{condition_count}: A factor vector specifying treatment groups for \code{data_count}.
 #'     \item \code{V}: A numeric vector of either tumor volumes (in vivo) or confluency values (in vitro).
 #'     \item \code{condition_v}: A factor vector specifying treatment groups for \code{V}.
 #'     \item \code{cell_line}: A factor vector of cell lines corresponding to the replicates in \code{data_count}.
-#'     \item \code{cell_rep}: A character vector of replicate identifiers for each column in \code{data_count}.
 #'     \item \code{VT0}: Optional numeric vector of baseline tumor volumes or confluency values for normalization.
 #'   }
 #' @param control_group Control group for comparative analysis.
-#' @param dirr Logical flag indicating the choice of model for the Dirichlet-multinomial likelihood:
+#' @param dir_mul Logical flag indicating the choice of model for the Dirichlet-multinomial likelihood:
 #'   \itemize{
-#'     \item \code{TRUE}: Use the model defined in \code{dirr.stan}.
+#'     \item \code{TRUE}: Use the model defined in \code{dir_mul.stan}.
 #'     \item \code{FALSE}: Use the model defined in \code{dir_new.stan}.
 #'   }
-#'  @param dispersion A list of parameters to control dispersion in the Dirichlet-multinomial model:
+#' @param dispersion A list of parameters to control dispersion in the Dirichlet-multinomial model:
 #'   \itemize{
 #'     \item \code{psi_mean}: Mean for the log-normal prior on the precision parameter \code{psi} (default: 0).
 #'     \item \code{psi_sd}: Standard deviation for the log-normal prior on \code{psi} (default: 0.5).
@@ -29,9 +28,9 @@
 #'   }
 #' @param control List of control parameters:
 #'   \itemize{
-#'     \item \code{chains}: Number of MCMC chains (default: 3).
-#'     \item \code{iter_count}: Total number of MCMC iterations for barcoding data (default: 1000).
-#'     \item \code{iter_V}: Total number of MCMC iterations for tumor volume or confluency data (default: 10000).
+#'     \item \code{chains}: How many Markov chains should be used for model fitting (default: 3).
+#'     \item \code{iter_count}: #'     \item \code{iter_count}: Number of iterations for fitting the barcoding data. Increasing this value may improve the effective sample size (default: 1000).
+#'     \item \code{iter_V}: Number of iterations for fitting the tumor volume or confluency data. Increasing this value may improve the effective sample size (default: 10000).
 #'     \item \code{cores}: Number of CPU cores to use (default: 3).
 #'     \item \code{warm}: Logical, indicating whether warm-up iterations should be included (default: FALSE).
 #'   }
@@ -55,7 +54,7 @@
 #'   }
 #' @export
 
-GPI <- function(data,control_group = NULL, dirr = TRUE,  dispersion = list(psi_mean = 0, psi_sd = 0.5, varphi_mean = 0, varphi_sd = 0.01),
+GPI <- function(data,control_group = NULL, dir_mul = TRUE,  dispersion = list(psi_mean = 0, psi_sd = 0.5, varphi_mean = 0, varphi_sd = 0.01),
                 control = list(chains = 3, iter_count = 1000, iter_V = 10000, cores = 3, warm = FALSE),
                 q_up = 0.975, q_lo = 0.025, n_sam = NULL, in_vivo = TRUE, ...) {
   if (is.null(n_sam)) {
@@ -121,24 +120,24 @@ GPI <- function(data,control_group = NULL, dirr = TRUE,  dispersion = list(psi_m
     varphi_sd = dispersion$varphi_sd
   )
 
-  # Fit Dirichlet-Multinomial Model Based on dirr Flag
-  if (dirr) {
-    fit <- rstan::stan(
-      file = system.file("stan/dirr.stan", package = "GPIpackage"),
-      data = dlist,
-      chains = control$chains,
-      iter = control$iter_count,
-      cores = control$cores,
-      control = list(adapt_delta = 0.999, stepsize = 0.5, max_treedepth = 12)
-    )
-  } else {
-    fit <- rstan::stan(
-      file = system.file("stan/dir_new2.stan", package = "GPIpackage"),
+  # Fit Dirichlet-Multinomial Model Based on dir_mul Flag
+  if (dir_mul) {
+        fit <- rstan::stan(
+      file = system.file("stan/dir_mul.stan", package = "TreatTrace"),
       data = dlist,
       chains = control$chains,
       iter = control$iter_count,
       cores = control$cores,
       control = list(adapt_delta = 0.999, stepsize = 0.5, max_treedepth = 18)
+    )
+  } else {
+      fit <- rstan::stan(
+      file = system.file("stan/dir_mul_ind.stan", package = "TreatTrace"),
+      data = dlist,
+      chains = control$chains,
+      iter = control$iter_count,
+      cores = control$cores,
+      control = list(adapt_delta = 0.999, stepsize = 0.5, max_treedepth = 12)
     )
   }
 
@@ -166,7 +165,7 @@ GPI <- function(data,control_group = NULL, dirr = TRUE,  dispersion = list(psi_m
     }
     # Log-normal likelihood for tumor volume (in vivo)
     fit_V <- rstan::stan(
-      file = system.file("stan/tumor_volume_lognormal1.stan", package = "GPIpackage"),
+      file = system.file("stan/tumor_volume_lognormal1.stan", package = "TreatTrace"),
       data = dlist_volume,
       chains = control$chains,
       iter = control$iter_V,
@@ -180,7 +179,7 @@ GPI <- function(data,control_group = NULL, dirr = TRUE,  dispersion = list(psi_m
     }
     # Beta likelihood for confluency (in vitro)
     fit_V <- rstan::stan(
-      file = system.file("stan/confluency.stan", package = "GPIpackage"),
+      file = system.file("stan/confluency.stan", package = "TreatTrace"),
       data = dlist_volume,
       chains = control$chains,
       iter = control$iter_V,

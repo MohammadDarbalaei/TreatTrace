@@ -1,4 +1,4 @@
-#' Posterior Predictive Check (PPC) with Visualization for Dirichlet-Multinomial Models
+#' Posterior Predictive Check with Visualization for Dirichlet-Multinomial Models
 #'
 #' This function performs posterior predictive checks (PPC) for count compositional data
 #' modeled using a Dirichlet-multinomial distribution. It generates violin plots to

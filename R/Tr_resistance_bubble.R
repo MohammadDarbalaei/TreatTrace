@@ -1,4 +1,4 @@
-#' Treatment Resistance Bubble Plot
+#' Treatment Resistance with Bubble Heatmap Plot
 #'
 #' This function calculates directional differences and mean differences within treatments,
 #' and generates bubble heatmaps for visualizing resistance patterns.
@@ -16,8 +16,8 @@
 #'
 #' @return A list containing two ggplot objects:
 #' \itemize{
-#'   \item `bubel_heatmap_w`: Heatmap showing directional differences between cell lines within treatments.
-#'   \item `bubel_heatmap_b`: Heatmap summarizing treatment-level comparisons.
+#'   \item `bubble_heatmap_w`: Heatmap showing directional differences between cell lines within treatments.
+#'   \item `bubble_heatmap_b`: Heatmap summarizing treatment-level comparisons.
 #' }
 #'
 #' @import ggplot2 dplyr
@@ -28,9 +28,9 @@
 #' model <- list(condition_count = c("Treatment1", "Treatment2"))
 #' cdf_data <- data.frame(cell = c("A", "B"), CDF = c(0.1, 0.9), treat = c("Treatment1", "Treatment1"))
 #' mean <- c(1.5, 2.5)
-#' treatment_resistance_buble(model, cdf_data, mean)
+#' Tr_resistance_bubble(model, cdf_data, mean)
 
-treatment_resistance_buble <- function(model, cdf_data, mean, q_up = 0.975, q_lo = 0.025,
+Tr_resistance_bubble <- function(model, cdf_data, mean, q_up = 0.975, q_lo = 0.025,
                                        min_w = 1, max_w = 8, min_b = 1, max_b = 8) {
 
 
@@ -96,7 +96,7 @@ treatment_resistance_buble <- function(model, cdf_data, mean, q_up = 0.975, q_lo
     arrange(treat, new, new1, Direction, Mean)
 
   # Generate wide-format bubble heatmap
-  bubel_heatmap_w <- ggplot(result1, aes(
+  bubble_heatmap_w <- ggplot(result1, aes(
     x = factor(new, levels = unique(new)),
     y = factor(new1, levels = unique(new1)),
     size = Mean, color = Direction
@@ -136,7 +136,7 @@ treatment_resistance_buble <- function(model, cdf_data, mean, q_up = 0.975, q_lo
   # Generate treatment-level bubble heatmap
   result_home <- result1[result1$new == result1$new1, ]
 
-  bubel_heatmap_b <-  ggplot(result_home, aes(
+  bubble_heatmap_b <-  ggplot(result_home, aes(
     x = treat,
     y = new1,
     size = Mean,
@@ -181,7 +181,7 @@ treatment_resistance_buble <- function(model, cdf_data, mean, q_up = 0.975, q_lo
 
   # Return the generated heatmaps as a list
   return(list(
-    bubel_heatmap_w = bubel_heatmap_w,
-    bubel_heatmap_b = bubel_heatmap_b
+    bubble_heatmap_w = bubble_heatmap_w,
+    bubble_heatmap_b = bubble_heatmap_b
   ))
 }

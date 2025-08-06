@@ -1,10 +1,20 @@
-Package: GPIpackage
+Package: TreatTrace
 Type: Package
-Title: Generalized Probability Inference Package
+Title: Genotype-Specific Drug Resistance Inference in GIST Using DNA Barcoding
 Version: 0.1.0
-Author: Your Name
-Maintainer: Your Name <your.email@example.com>
-Description: Package for Generalized Probability Inference (GPI) using Dirichlet-Multinomial models.
+Authors@R: 
+    c(
+      person(given = "Mohammad", family = "Darbalaei", email = "mohammad.darbalaei@uni-due.de", 
+             role = c("aut", "cre")),
+      person(given = "Daniel", family = "Hoffmann", 
+             role = "aut",
+             comment = c(ORCID = "0000-0003-2973-7869"))
+    )
+Maintainer: Mohammad Darbalaei <mohammad.darbalaei@uni-due.de>
+Description: TreatTrace enables high-throughput analysis of genotype-specific drug resistance 
+    in gastrointestinal stromal tumors (GIST) using DNA-barcoded cell mixtures. It integrates 
+    barcode data with tumor volume or confluency measurements and applies hierarchical Bayesian 
+    modeling to quantify treatment responses in vitro and in vivo.
 Depends:
     R (>= 3.5.0)
 Imports:
@@ -17,4 +27,10 @@ Imports:
     viridis
 License: GPL-3
 Encoding: UTF-8
+LazyData: true
 RoxygenNote: 7.3.2
+VignetteBuilder: knitr
+Suggests: 
+    knitr, 
+    rmarkdown
+
