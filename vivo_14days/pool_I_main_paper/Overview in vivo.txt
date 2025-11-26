@@ -1,0 +1,46 @@
+1. Separately barcoded cell lines (Pool I) were cultured in 10 cm dishes (EH).
+
+cell line	Barcode-ID	Barcode Sequence
+T1parental	4	GGCACG
+T1parental	6	TTAGAA
+T1parental	9	CTCCAA
+TSC2	18	GTTTAG
+TSC2	19	AGAGTT
+TSC2	20	GAAAAA
+PTEN	15	CTAGGT
+PTEN	16	TTTGAA
+PTEN	17	CAGGCC
+Hom	25	GGGAAC
+Hom	26	AGTTAC
+Hom	27	ACTCAA
+V654A	29	GTAACC
+V654A	30	TGAGAA
+V654A	39	GGGCGT
+D816E	24	CCAGGT
+D816E	34	TATATA
+D816E	36	GTGAAG
+D816A	10	CTAGAT
+D816A	11	TGGGCC
+D816A	13	CAGGTC
+A829P	21	GGTCCA
+A829P	22	TTAGAT
+A829P	28	ATGCAT
+
+2. Cells were removed from the dishes, counted and equally mixed. The mixed cell pool was subcutaneously injected in mice (EH+AG Bauer).
+
+3. Three control mice were sacrificed after tumor foramtion, prior to treatment start (d0).
+
+4. Upon tumor formation, the mice were treated daily with different compounds (AG Bauer + AG Grüner)
+Compounds (=abbreviation used for samples) 
+- control (treated with solvent) = ctr
+- Imatinib = im
+- Sunitinib = sun
+- Trametinib = tram
+- Imatinib+Trametinib = im/tram
+- Sunitinib + Trametinib = sun/tram
+
+5. Tumor volume of mice was measured using a digital caliper (AG Bauer).
+
+6. Mice were sacrificed according to animal protocols (AG Bauer / Ag Grüner.
+
+7. DNA Isolation from the harvested tumors, PCR Amplification of Barcode region and Addition of Illumina Multiplexing Sequence, Separation of PCR products on Agarose gel, DNA purification, Illumina Sequencing and Barcode Extraction using Python Scripts (JZ)
